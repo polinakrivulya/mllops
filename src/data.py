@@ -28,6 +28,30 @@ def load_data_and_tokenizer(cfg) -> Tuple[Dict, Any, Dict[int, str], Dict[str, i
 
     ds = ds.map(tokenize, batched=True, remove_columns=[text_col])
 
+    # сэмплы для быстрых прогонов
+    def maybe_select(split):
+        k = (
+            cfg["data"].get("max_train_samples")
+            if split == "train"
+            else cfg["data"].get("max_eval_samples")
+        )
+        return (
+            ds[split].select(range(min(len(ds[split]), k)))
+            if k
+            else ds[split]
+        )
+
+    train_ds = maybe_select("train")
+
+    eval_split = cfg["runtime"].get("eval_on", "validation")
+    if "validation" not in ds:
+        ds = ds["train"].train_test_split(
+            test_size=0.1,
+            seed=cfg["seed"],
+        )
+        train_ds, eval_ds = ds["train"], ds["test"]
+    else:
+        eval_ds = maybe_select("validation")
 
     collator = DataCollatorWithPadding(tokenizer=tokenizer)
     num_labels = len(labels)
