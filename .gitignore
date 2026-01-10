@@ -1,0 +1,15 @@
+# macOS
+.DS_Store
+
+# virtualenvs
+.venv/
+.venv_/
+venv/
+
+# python cache
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# huggingface cache (обычно не хранят в репо)
+.hf_cache/
