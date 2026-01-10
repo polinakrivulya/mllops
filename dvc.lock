@@ -1,0 +1,104 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: python -m src.prepare --config configs/default.yaml
+    deps:
+    - path: configs/default.yaml
+      hash: md5
+      md5: 648d392c55af2fae0ef9d857fd7f80a0
+      size: 808
+    - path: src/prepare.py
+      hash: md5
+      md5: 1be0666706573ea7676f46e8c08d2f31
+      size: 2262
+    - path: src/utils/config.py
+      hash: md5
+      md5: d03e0d67ab4c89d43381c3001ca622cd
+      size: 203
+    - path: src/utils/logger.py
+      hash: md5
+      md5: 8836be13790023facc9993b0f7302623
+      size: 378
+    outs:
+    - path: data/processed/emotion
+      hash: md5
+      md5: 235c1c92ea2aab774d88ed54b3c9c8aa.dir
+      size: 3246239
+      nfiles: 10
+    - path: data/raw/emotion
+      hash: md5
+      md5: d538dacec205d713e95f0fe33b4083b8.dir
+      size: 2184585
+      nfiles: 10
+  train:
+    cmd: python -m src.train --config configs/default.yaml
+    deps:
+    - path: configs/default.yaml
+      hash: md5
+      md5: 648d392c55af2fae0ef9d857fd7f80a0
+      size: 808
+    - path: data/processed/emotion
+      hash: md5
+      md5: 235c1c92ea2aab774d88ed54b3c9c8aa.dir
+      size: 3246239
+      nfiles: 10
+    - path: src/data.py
+      hash: md5
+      md5: 5eec150dd3db1f90d51d6b9b9c5ef4e9
+      size: 1030
+    - path: src/model.py
+      hash: md5
+      md5: 24863466732a4dbf12cd71f777f24035
+      size: 1148
+    - path: src/train.py
+      hash: md5
+      md5: e372ea6c051f3a6b1b9a6d73d8822f57
+      size: 3109
+    - path: src/utils/config.py
+      hash: md5
+      md5: d03e0d67ab4c89d43381c3001ca622cd
+      size: 203
+    - path: src/utils/logger.py
+      hash: md5
+      md5: 8836be13790023facc9993b0f7302623
+      size: 378
+    outs:
+    - path: models/bert-tiny
+      hash: md5
+      md5: 3e6d82e1d9a60b6d3668f1b0b7e6cda6.dir
+      size: 179482815
+      nfiles: 39
+  evaluate:
+    cmd: python -m src.evaluate --config configs/default.yaml
+    deps:
+    - path: configs/default.yaml
+      hash: md5
+      md5: 648d392c55af2fae0ef9d857fd7f80a0
+      size: 808
+    - path: data/processed/emotion
+      hash: md5
+      md5: 235c1c92ea2aab774d88ed54b3c9c8aa.dir
+      size: 3246239
+      nfiles: 10
+    - path: models/bert-tiny
+      hash: md5
+      md5: 3e6d82e1d9a60b6d3668f1b0b7e6cda6.dir
+      size: 179482815
+      nfiles: 39
+    - path: src/evaluate.py
+      hash: md5
+      md5: c7b28885ddd9777f88ad8b062a0a7501
+      size: 2272
+    - path: src/utils/config.py
+      hash: md5
+      md5: d03e0d67ab4c89d43381c3001ca622cd
+      size: 203
+    - path: src/utils/logger.py
+      hash: md5
+      md5: 8836be13790023facc9993b0f7302623
+      size: 378
+    outs:
+    - path: reports/metrics.json
+      hash: md5
+      md5: 2ca5d44771fdc6f60f2490d2477c53ef
+      size: 237
