@@ -33,3 +33,8 @@ runtime:
   eval_on: validation
 evaluate:
   metrics_path: reports/metrics.json
+mlflow:
+  tracking_uri: null          # null => локально (mlruns/)
+  experiment_name: emotion-classifier
+  run_name: null              # можно оставить null
+  autolog: true
