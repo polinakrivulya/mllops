@@ -84,5 +84,32 @@ python -m src.eval --model_dir outputs/bert-tiny --split validation
 ### Build
 Перед сборкой убедитесь, что модель существует локально: `models/bert-tiny/`.
 
-```bash
+- bash
 docker build -t ml-app:v1 .
+
+## TorchServe
+
+### Артефакты
+- HF-модель после обучения: `models/bert-tiny/` (DVC)
+- TorchServe state_dict: `torchserve/model.pt`
+- TorchServe archive: `torchserve/model-store/mymodel.mar`
+
+### Сборка model.pt и .mar
+- bash
+dvc pull  # или dvc repro train, чтобы получить models/bert-tiny
+
+python -m torchserve.export_model --hf_model_dir models/bert-tiny --out_path torchserve/model.pt
+
+mkdir -p torchserve/model-store
+torch-model-archiver \
+  --model-name mymodel \
+  --version 1.0 \
+  --serialized-file torchserve/model.pt \
+  --handler torchserve/handler.py \
+  --extra-files "models/bert-tiny/config.json,models/bert-tiny/tokenizer_config.json,models/bert-tiny/special_tokens_map.json,models/bert-tiny/vocab.txt" \
+  --export-path torchserve/model-store \
+  -f
+
+### Docker build/run
+docker build -t mymodel-serve:v1 -f torchserve/Dockerfile .
+docker run -d -p 8080:8080 -p 8081:8081 mymodel-serve:v1
