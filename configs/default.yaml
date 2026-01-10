@@ -6,6 +6,8 @@ data:
   max_seq_length: 128
   max_train_samples: null
   max_eval_samples: null
+  raw_dir: data/raw/emotion
+  processed_dir: data/processed/emotion
 model:
   model_name_or_path: prajjwal1/bert-tiny
   init_from_scratch: false
@@ -29,3 +31,5 @@ training:
 runtime:
   report_to: none
   eval_on: validation
+evaluate:
+  metrics_path: reports/metrics.json
