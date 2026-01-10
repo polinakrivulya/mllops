@@ -13,7 +13,7 @@ model:
   init_from_scratch: false
   num_labels: 6
 training:
-  output_dir: outputs/bert-tiny
+  output_dir: models/bert-tiny
   learning_rate: 5e-5
   weight_decay: 0.01
   num_train_epochs: 3

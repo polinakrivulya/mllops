@@ -1,12 +1,18 @@
 import argparse
 import json
 import logging
+import os
 from typing import Any, Dict
 
 import evaluate
 import numpy as np
 from datasets import load_from_disk
-from transformers import AutoModelForSequenceClassification, AutoTokenizer, DataCollatorWithPadding, Trainer
+from transformers import (
+    AutoModelForSequenceClassification,
+    AutoTokenizer,
+    DataCollatorWithPadding,
+    Trainer,
+)
 
 from src.utils.config import load_config
 from src.utils.logger import get_logger
@@ -53,10 +59,13 @@ def main() -> None:
 
     logger.info("Running evaluation")
     metrics = trainer.evaluate(eval_dataset=eval_ds)
-    # Trainer добавляет eval_loss, eval_runtime и т.д. — оставим полезное
+
     out = {k: float(v) for k, v in metrics.items() if isinstance(v, (int, float))}
 
-    logger.info(f"Saving metrics to {metrics_path}")
+    # ВАЖНО: создать директорию под метрики
+    os.makedirs(os.path.dirname(metrics_path), exist_ok=True)
+
+    logger.info(f"Saving metrics to reports/metrics.json")
     with open(metrics_path, "w", encoding="utf-8") as f:
         json.dump(out, f, ensure_ascii=False, indent=2)
 
