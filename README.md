@@ -62,3 +62,10 @@ python -m src.train --config configs/default.yaml --verbose
 python -m src.train --config configs/tiny-fast.yaml --verbose
 - Оценка сохраненной модели:
 python -m src.eval --model_dir outputs/bert-tiny --split validation
+
+## MLflow tracking
+
+Каждый запуск `python -m src.train --config ...` создаёт отдельный MLflow run с:
+- параметрами (весь YAML конфиг),
+- метриками (eval_f1, eval_accuracy, eval_loss),
+- артефактами (HF-модель, конфиг запуска, dvc.lock).
