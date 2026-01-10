@@ -1,0 +1,36 @@
+stages:
+  prepare:
+    cmd: python -m src.prepare --config configs/default.yaml
+    deps:
+      - src/prepare.py
+      - src/utils/config.py
+      - src/utils/logger.py
+      - configs/default.yaml
+    outs:
+      - data/raw/emotion
+      - data/processed/emotion
+
+  train:
+    cmd: python -m src.train --config configs/default.yaml
+    deps:
+      - src/train.py
+      - src/data.py
+      - src/model.py
+      - src/utils/config.py
+      - src/utils/logger.py
+      - configs/default.yaml
+      - data/processed/emotion
+    outs:
+      - models/bert-tiny
+
+  evaluate:
+    cmd: python -m src.evaluate --config configs/default.yaml
+    deps:
+      - src/evaluate.py
+      - src/utils/config.py
+      - src/utils/logger.py
+      - configs/default.yaml
+      - data/processed/emotion
+      - models/bert-tiny
+    metrics:
+      - reports/metrics.json
