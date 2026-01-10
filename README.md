@@ -69,3 +69,20 @@ python -m src.eval --model_dir outputs/bert-tiny --split validation
 - параметрами (весь YAML конфиг),
 - метриками (eval_f1, eval_accuracy, eval_loss),
 - артефактами (HF-модель, конфиг запуска, dvc.lock).
+
+## Docker
+
+### Что делает контейнер
+Контейнер запускает `python -m src.predict` и выполняет batch-inference:
+- читает CSV из `--input_path` (ожидается колонка `text`)
+- загружает модель из `--model_dir` (по умолчанию `models/bert-tiny`)
+- записывает CSV в `--output_path` с колонками:
+  - `pred_id` (int)
+  - `pred_label` (str)
+  - `pred_score` (float)
+
+### Build
+Перед сборкой убедитесь, что модель существует локально: `models/bert-tiny/`.
+
+```bash
+docker build -t ml-app:v1 .
