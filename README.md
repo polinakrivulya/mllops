@@ -14,9 +14,21 @@
     - Фиксированный random_seed
     - Воспроизводимость результатов ±0.5% F1 (при одном и том же seed)
 
-**Данные:**
-- Hugging Face Datasets: dair-ai/emotion
-- Преимущества: легальная доступность (не NDA), небольшой размер, готовая разметка, быстрые загрузка/предобработка
+## Датасет
+Источник: Hugging Face Datasets — `dair-ai/emotion`  
+https://huggingface.co/datasets/dair-ai/emotion
+
+Датасет автоматически скачивается на стадии `prepare` и сохраняется локально (см. ниже).
+
+## Где физически лежат данные/модели (DVC-артефакты)
+Большие файлы **не хранятся в Git**, но версионируются через **DVC**:
+
+- **Raw dataset**: `data/raw/emotion/`
+- **Processed dataset**: `data/processed/emotion/`
+- **Trained model (HF format)**: `models/bert-tiny/`
+- **Metrics**: `reports/metrics.json`
+
+Все эти артефакты можно восстановить командой `dvc pull` для любой версии репозитория (после `git checkout <commit>`).
 
 **План экспериментов:**
 - Бейзлайн: majority class
