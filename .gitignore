@@ -13,3 +13,6 @@ __pycache__/
 
 # huggingface cache (обычно не хранят в репо)
 .hf_cache/
+
+mlruns/
+mlartifacts/
